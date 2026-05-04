@@ -138,7 +138,6 @@ Projeto desenvolvido por uma equipe de 6 integrantes:
 - André Luiz
 -  Camila Vitória
 -  Ênio Enrique
--  Fernando
 -  Aquiles Magalhães
 -  Rian
 
