@@ -133,8 +133,14 @@ O projeto é gerenciado utilizando **Scrum**, com organização de tarefas no Tr
 
 Projeto desenvolvido por uma equipe de 6 integrantes:
 
-- Líder: *(Seu nome aqui)*  
-- Desenvolvedores: *(nomes da equipe)*  
+- Líder: Fernando  
+- Desenvolvedores:
+- André Luiz
+-  Camila Vitória
+-  Ênio Enrique
+-  Fernando
+-  Aquiles Magalhães
+-  Rian
 
 ---
 
