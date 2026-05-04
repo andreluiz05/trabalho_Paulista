@@ -117,9 +117,9 @@ Os testes da API são realizados utilizando o Postman, validando:
 
 ## 📊 Metodologia Ágil
 
-O projeto é gerenciado utilizando **Scrum**, com organização de tarefas no Trello.
+O projeto é gerenciado utilizando **Kanban Scrum Ágil**, com organização de tarefas no Trello.
 
-### Fluxo de trabalho:
+### Fluxo de trabalho horizontal e objetivo:
 
 - Backlog  
 - Sprint  
