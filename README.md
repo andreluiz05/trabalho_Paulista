@@ -155,7 +155,7 @@ cd trabalha-paulista
 ./mvnw spring-boot:run
 
 4. Acessar a API:
-http://localhost:8080
+http://localhost:8080/swagger-ui/index.html#/
 
 ---
 
