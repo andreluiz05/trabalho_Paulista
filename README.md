@@ -38,7 +38,7 @@ Controller → Service → Repository → Database
 - Java  
 - Spring Boot  
 - JPA / Hibernate  
-- Banco de Dados (MySQL ou H2)  
+- Banco de Dados (MySQL - RailWay)
 - Postman (testes de API)  
 - GitHub (versionamento)  
 
