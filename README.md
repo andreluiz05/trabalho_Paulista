@@ -35,11 +35,11 @@ Controller → Service → Repository → Database
 
 ## ⚙️ Tecnologias Utilizadas
 
-- Java 21
+- Java  
 - Spring Boot  
 - JPA / Hibernate  
-- Banco de Dados em Nuvem (MySQL - RailWay)
-- Postman (testes de API) ou pelo "Site Institucional" ( http://localhost:8080/swagger-ui/index.html ) 
+- Banco de Dados (MySQL ou H2)  
+- Postman (testes de API)  
 - GitHub (versionamento)  
 
 ---
@@ -119,7 +119,7 @@ Os testes da API são realizados utilizando o Postman, validando:
 
 O projeto é gerenciado utilizando **Kanban Scrum Ágil**, com organização de tarefas no Trello.
 
-### Fluxo de trabalho horizontal e objetivo:
+### c
 
 - Backlog  
 - Sprint  
@@ -155,7 +155,8 @@ cd trabalha-paulista
 ./mvnw spring-boot:run
 
 4. Acessar a API:
-http://localhost:8080/swagger-ui/index.html
+http://localhost:8080
+
 ---
 
 ## 📄 Licença
