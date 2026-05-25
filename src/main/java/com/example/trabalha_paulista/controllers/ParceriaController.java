@@ -1,7 +1,9 @@
 package com.example.trabalha_paulista.controllers;
 
+import com.example.trabalha_paulista.exceptions.ResourceNotFoundException;
 import com.example.trabalha_paulista.models.Parceria;
 import com.example.trabalha_paulista.repository.ParceriaRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,23 +21,24 @@ public class ParceriaController {
     }
 
     @PostMapping
-    public Parceria criar(@RequestBody Parceria parceria) {
+    public Parceria criar(@Valid @RequestBody Parceria parceria) {
         return repository.save(parceria);
     }
 
     @PutMapping("/{id}")
-    public Parceria atualizar(@PathVariable Long id, @RequestBody Parceria dadosNovos) {
+    public Parceria atualizar(@PathVariable Long id, @Valid @RequestBody Parceria dadosNovos) {
         return repository.findById(id).map(parceria -> {
-            // 🎯 Correção cirúrgica dos métodos aqui:
             parceria.setNome_empresa(dadosNovos.getNome_empresa());
             parceria.setDescricao(dadosNovos.getDescricao());
             parceria.setContato(dadosNovos.getContato());
             return repository.save(parceria);
-        }).orElseThrow(() -> new RuntimeException("Parceria não encontrada"));
+        }).orElseThrow(() -> new ResourceNotFoundException("Parceria não encontrada"));
     }
 
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
-        repository.deleteById(id);
+        Parceria parceria = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Parceria não encontrada"));
+        repository.delete(parceria);
     }
 }
