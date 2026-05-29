@@ -1,11 +1,21 @@
 package com.example.trabalha_paulista.controllers;
 
+import com.example.trabalha_paulista.dtos.UsuarioCreateRequest;
+import com.example.trabalha_paulista.dtos.UsuarioResponse;
+import com.example.trabalha_paulista.dtos.UsuarioUpdateRequest;
 import com.example.trabalha_paulista.exceptions.ResourceNotFoundException;
 import com.example.trabalha_paulista.models.Usuario;
 import com.example.trabalha_paulista.repository.UsuarioRepository;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -13,37 +23,59 @@ import java.util.List;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioRepository repository;
+    private final UsuarioRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    // GET - Listar todos (Read)
+    public UsuarioController(UsuarioRepository repository, PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @GetMapping
-    public List<Usuario> listar() {
-        return repository.findAll();
+    public List<UsuarioResponse> listar() {
+        return repository.findAll().stream().map(UsuarioResponse::from).toList();
     }
 
-    // POST - Criar novo (Create)
     @PostMapping
-    public Usuario criar(@Valid @RequestBody Usuario usuario) {
-        return repository.save(usuario);
+    public UsuarioResponse criar(@Valid @RequestBody UsuarioCreateRequest request) {
+        if (repository.existsByEmail(request.email())) {
+            throw new IllegalArgumentException("Email ja cadastrado");
+        }
+
+        Usuario usuario = new Usuario();
+        usuario.setNome(request.nome());
+        usuario.setEmail(request.email());
+        usuario.setSenha(passwordEncoder.encode(request.senha()));
+        usuario.setTelefone(request.telefone());
+        usuario.setTipoUsuario(request.tipoUsuario());
+
+        return UsuarioResponse.from(repository.save(usuario));
     }
 
-    // PUT - Atualizar (Update)
     @PutMapping("/{id}")
-    public Usuario atualizar(@PathVariable Long id, @Valid @RequestBody Usuario dadosNovos) {
+    public UsuarioResponse atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioUpdateRequest request) {
         return repository.findById(id).map(usuario -> {
-            usuario.setNome(dadosNovos.getNome());
-            usuario.setEmail(dadosNovos.getEmail());
-            usuario.setSenha(dadosNovos.getSenha());
-            return repository.save(usuario);
-        }).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+            repository.findByEmail(request.email())
+                    .filter(existente -> !existente.getId().equals(id))
+                    .ifPresent(existente -> {
+                        throw new IllegalArgumentException("Email ja cadastrado");
+                    });
+
+            usuario.setNome(request.nome());
+            usuario.setEmail(request.email());
+            if (request.senha() != null && !request.senha().isBlank()) {
+                usuario.setSenha(passwordEncoder.encode(request.senha()));
+            }
+            usuario.setTelefone(request.telefone());
+            usuario.setTipoUsuario(request.tipoUsuario());
+            return UsuarioResponse.from(repository.save(usuario));
+        }).orElseThrow(() -> new ResourceNotFoundException("Usuario nao encontrado"));
     }
 
-    // DELETE - Remover (Delete)
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
         Usuario usuario = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario nao encontrado"));
         repository.delete(usuario);
     }
 }

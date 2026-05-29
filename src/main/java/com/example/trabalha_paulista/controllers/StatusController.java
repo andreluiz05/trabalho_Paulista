@@ -8,6 +8,6 @@ public class StatusController {
 
     @GetMapping("/status")
     public String checarStatus() {
-        return "Tudo OK! A API do Trabalha Paulista está rodando perfeitamente. 🚀";
+        return "Tudo OK! A API do Trabalha Paulista esta rodando.";
     }
 }

@@ -1,56 +1,84 @@
 package com.example.trabalha_paulista.config;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
-import io.swagger.v3.oas.models.info.Info;
-
 @Configuration
 public class OpenApiConfig {
+
+    private static final String SECURITY_SCHEME_NAME = "bearerAuth";
 
     @Bean
     public OpenAPI customOpenAPI() {
         String descricaoCustomizada = """
             <img src="/imagens/Logo_TP.png" width="800" alt="Logo Trabalha Paulista" />
-            
+
             # 🏢 TRABALHA PAULISTA | Painel Interativo da API
-            
-            O **Trabalha Paulista** é o motor definitivo para conectar talentos, promover cursos, gerenciar mentorias e impulsionar a empregabilidade em **Paulista - PE**. 🌟
-            
-            🌐 _**Nota de Arquitetura:** Esta API serve como o cérebro/back-end central do ecossistema. No futuro, ela alimentará diretamente plataformas web e aplicativos mobile através desses mesmos pontos de acesso (endpoints)._
-            
-            ---
-            
-            ## 🗺️ GUIA PRÁTICO: Como usar este Painel de Testes
-            
-            Este painel organiza os recursos em blocos sanfonados (ex: `usuario-controller`, `vaga-controller`). Clique neles para abrir as opções.
-            
-            ### 🎨 Significado das Cores (Ações do Banco)
-            * 🟢 **POST (Verde):** Cria um registro novo (Envia dados para o banco).
-            * 🔵 **GET (Azul):** Lista ou busca os dados que já estão guardados.
-            * 🟠 **PUT (Laranja):** Atualiza/Edita as informações de um registro existente.
-            * 🔴 **DELETE (Vermelho):** Apaga permanentemente um registro do banco.
-            
-            ### 👣 Passo a Passo para Executar qualquer Teste (Apenas 4 Cliques)
-            1. **Clique 1:** Clique na linha da ação desejada para expandir o formulário (ex: 🟢 `POST /cursos`).
-            2. **Clique 2:** No canto direito, clique no botão cinza **`Try it out`** (Testar) para liberar a edição.
-            3. **Clique 3:** Na caixa de texto que abrir, altere o formato do texto (JSON) preenchendo os dados reais entre as aspas.
-            4. **Clique 4:** Clique no botão azul grande **`Execute`** (Executar).
-            
-            ### 📊 Como analisar a Resposta (Responses)
-            Logo abaixo do botão de executar, o sistema retornará o resultado:
-            * **Código 200 ou 201 (Verde):** Sucesso absoluto! O banco processou e salvou as informações.
-            * **Código 400 ou 500 (Vermelho):** Ocorreu um erro. Verifique se o formato dos dados está correto ou se alguma regra de validação foi quebrada.
-            
-            ---
-            ⚠️ **REGRA DE INTEGRIDADE CRUCIAL:** Por conta das Chaves Estrangeiras (FK), lembre-se de **criar um usuário primeiro** na rota `POST /usuarios` e anotar o ID gerado antes de tentar publicar uma vaga ou realizar inscrições!
-            
-            _Desenvolvido com ☕, Java 21, Spring Boot, Springdoc OpenAPI e MySQL._
+
+            🌟 O Trabalha Paulista e o motor para conectar talentos, promover cursos,
+            gerenciar mentorias, divulgar vagas e impulsionar a empregabilidade em Paulista - PE.
+
+            🌐 Esta API serve como o back-end central do ecossistema. Ela pode alimentar
+            plataformas web, aplicativos mobile e paineis administrativos atraves destes endpoints.
+
+            ## 🔐 Autenticacao
+            1. 👤 Crie uma conta em `POST /auth/register` ou faca login em `POST /auth/login`.
+            2. 📋 Copie o token retornado.
+            3. 🔑 No Swagger, clique em `Authorize`.
+            4. 🪪 Informe: `Bearer seu-token`.
+
+            ✅ As rotas `/auth/**`, `/status`, `/swagger-ui/**` e `/v3/api-docs/**`
+            ficam liberadas sem token. As demais rotas exigem autenticacao JWT.
+
+            ## 🧭 Guia pratico para testar
+            Este painel organiza os recursos em blocos, como `usuario-controller`,
+            `vaga-controller`, `curso-controller`, `mentoria-controller` e `parceria-controller`.
+
+            1. 📂 Abra o bloco do recurso desejado.
+            2. 🎯 Clique na acao desejada, por exemplo `POST /cursos`.
+            3. 🧪 Clique em `Try it out`.
+            4. 📝 Preencha o JSON de exemplo com dados reais.
+            5. 🚀 Clique em `Execute`.
+
+            ## 🔄 Fluxo de uso
+            - 🟢 `POST`: cria um novo registro no banco.
+            - 🔵 `GET`: lista ou consulta registros existentes.
+            - 🟠 `PUT`: atualiza um registro existente.
+            - 🔴 `DELETE`: remove um registro do banco.
+
+            ## 📊 Como analisar as respostas
+            - ✅ `200` ou `201`: operacao concluida com sucesso.
+            - ⚠️ `400`: dados invalidos ou corpo da requisicao mal formado.
+            - 🔒 `401`: token ausente, invalido ou expirado.
+            - 🔎 `404`: recurso nao encontrado.
+            - ⚔️ `409`: conflito de integridade, como email duplicado.
+            - 💥 `500`: erro interno do servidor.
+
+            ## ⚠️ Regra de integridade importante
+            Para publicar uma vaga com publicador, primeiro crie um usuario e use o ID
+            retornado no campo `publicadorId`.
+
+            ## 🛡️ Observacoes sobre seguranca
+            As respostas de usuario nao expõem a senha. A senha e salva com BCrypt
+            e a autenticacao usa JWT no cabecalho `Authorization`.
+
+            ☕ Desenvolvido com Java 21, Spring Boot, Springdoc OpenAPI, JWT e MySQL.
             """;
 
         return new OpenAPI()
+                .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
+                .components(new Components()
+                        .addSecuritySchemes(SECURITY_SCHEME_NAME, new SecurityScheme()
+                                .name(SECURITY_SCHEME_NAME)
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")))
                 .info(new Info()
                         .title("🏢 TRABALHA PAULISTA | Central de Controle da API")
                         .version("1.0.0")

@@ -1,27 +1,39 @@
 package com.example.trabalha_paulista.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
+
 import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "inscricoes_vagas")
+@Table(
+        name = "inscricoes_vagas",
+        uniqueConstraints = @UniqueConstraint(name = "uk_inscricao_vaga_usuario_vaga", columnNames = {"id_usuario", "id_vaga"})
+)
 public class InscricaoVaga {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Chave estrangeira puxando o Usuário
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario candidato;
 
-    // Chave estrangeira puxando a Vaga
-    @ManyToOne
-    @JoinColumn(name = "id_vaga")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_vaga", nullable = false)
     private Vaga vaga;
 
-    private LocalDate data_inscricao;
+    @Column(name = "data_inscricao", nullable = false)
+    private LocalDate dataInscricao;
 }
