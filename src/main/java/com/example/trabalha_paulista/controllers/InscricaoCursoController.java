@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,8 @@ public class InscricaoCursoController {
     private final UsuarioRepository usuarioRepository;
     private final CursoRepository cursoRepository;
 
-    public InscricaoCursoController(InscricaoCursoRepository repository, UsuarioRepository usuarioRepository, CursoRepository cursoRepository) {
+    public InscricaoCursoController(InscricaoCursoRepository repository, UsuarioRepository usuarioRepository,
+            CursoRepository cursoRepository) {
         this.repository = repository;
         this.usuarioRepository = usuarioRepository;
         this.cursoRepository = cursoRepository;
@@ -38,6 +40,13 @@ public class InscricaoCursoController {
     @GetMapping
     public List<InscricaoCursoResponse> listar() {
         return repository.findAll().stream().map(InscricaoCursoResponse::from).toList();
+    }
+
+    @GetMapping("/{id}")
+    public InscricaoCursoResponse buscarPorId(@PathVariable Long id) {
+        return repository.findById(id)
+                .map(InscricaoCursoResponse::from)
+                .orElseThrow(() -> new ResourceNotFoundException("Inscricao em curso nao encontrada"));
     }
 
     @PostMapping
@@ -50,6 +59,22 @@ public class InscricaoCursoController {
         inscricao.setAluno(buscarUsuario(request.alunoId()));
         inscricao.setCurso(buscarCurso(request.cursoId()));
         inscricao.setDataInscricao(LocalDate.now());
+        return InscricaoCursoResponse.from(repository.save(inscricao));
+    }
+
+    @PutMapping("/{id}")
+    public InscricaoCursoResponse atualizar(@PathVariable Long id, @Valid @RequestBody InscricaoCursoRequest request) {
+        InscricaoCurso inscricao = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Inscricao em curso nao encontrada"));
+
+        repository.findByAlunoIdAndCursoId(request.alunoId(), request.cursoId())
+                .filter(existente -> !existente.getId().equals(id))
+                .ifPresent(existente -> {
+                    throw new IllegalArgumentException("Usuario ja inscrito neste curso");
+                });
+
+        inscricao.setAluno(buscarUsuario(request.alunoId()));
+        inscricao.setCurso(buscarCurso(request.cursoId()));
         return InscricaoCursoResponse.from(repository.save(inscricao));
     }
 

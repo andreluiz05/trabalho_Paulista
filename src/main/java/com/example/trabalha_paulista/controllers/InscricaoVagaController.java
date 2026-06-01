@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,8 @@ public class InscricaoVagaController {
     private final UsuarioRepository usuarioRepository;
     private final VagaRepository vagaRepository;
 
-    public InscricaoVagaController(InscricaoVagaRepository repository, UsuarioRepository usuarioRepository, VagaRepository vagaRepository) {
+    public InscricaoVagaController(InscricaoVagaRepository repository, UsuarioRepository usuarioRepository,
+            VagaRepository vagaRepository) {
         this.repository = repository;
         this.usuarioRepository = usuarioRepository;
         this.vagaRepository = vagaRepository;
@@ -38,6 +40,13 @@ public class InscricaoVagaController {
     @GetMapping
     public List<InscricaoVagaResponse> listar() {
         return repository.findAll().stream().map(InscricaoVagaResponse::from).toList();
+    }
+
+    @GetMapping("/{id}")
+    public InscricaoVagaResponse buscarPorId(@PathVariable Long id) {
+        return repository.findById(id)
+                .map(InscricaoVagaResponse::from)
+                .orElseThrow(() -> new ResourceNotFoundException("Inscricao em vaga nao encontrada"));
     }
 
     @PostMapping
@@ -50,6 +59,22 @@ public class InscricaoVagaController {
         inscricao.setCandidato(buscarUsuario(request.candidatoId()));
         inscricao.setVaga(buscarVaga(request.vagaId()));
         inscricao.setDataInscricao(LocalDate.now());
+        return InscricaoVagaResponse.from(repository.save(inscricao));
+    }
+
+    @PutMapping("/{id}")
+    public InscricaoVagaResponse atualizar(@PathVariable Long id, @Valid @RequestBody InscricaoVagaRequest request) {
+        InscricaoVaga inscricao = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Inscricao em vaga nao encontrada"));
+
+        repository.findByCandidatoIdAndVagaId(request.candidatoId(), request.vagaId())
+                .filter(existente -> !existente.getId().equals(id))
+                .ifPresent(existente -> {
+                    throw new IllegalArgumentException("Usuario ja inscrito nesta vaga");
+                });
+
+        inscricao.setCandidato(buscarUsuario(request.candidatoId()));
+        inscricao.setVaga(buscarVaga(request.vagaId()));
         return InscricaoVagaResponse.from(repository.save(inscricao));
     }
 

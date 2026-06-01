@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,8 @@ public class InscricaoMentoriaController {
     private final UsuarioRepository usuarioRepository;
     private final MentoriaRepository mentoriaRepository;
 
-    public InscricaoMentoriaController(InscricaoMentoriaRepository repository, UsuarioRepository usuarioRepository, MentoriaRepository mentoriaRepository) {
+    public InscricaoMentoriaController(InscricaoMentoriaRepository repository, UsuarioRepository usuarioRepository,
+            MentoriaRepository mentoriaRepository) {
         this.repository = repository;
         this.usuarioRepository = usuarioRepository;
         this.mentoriaRepository = mentoriaRepository;
@@ -38,6 +40,13 @@ public class InscricaoMentoriaController {
     @GetMapping
     public List<InscricaoMentoriaResponse> listar() {
         return repository.findAll().stream().map(InscricaoMentoriaResponse::from).toList();
+    }
+
+    @GetMapping("/{id}")
+    public InscricaoMentoriaResponse buscarPorId(@PathVariable Long id) {
+        return repository.findById(id)
+                .map(InscricaoMentoriaResponse::from)
+                .orElseThrow(() -> new ResourceNotFoundException("Inscricao em mentoria nao encontrada"));
     }
 
     @PostMapping
@@ -50,6 +59,23 @@ public class InscricaoMentoriaController {
         inscricao.setParticipante(buscarUsuario(request.participanteId()));
         inscricao.setMentoria(buscarMentoria(request.mentoriaId()));
         inscricao.setDataInscricao(LocalDate.now());
+        return InscricaoMentoriaResponse.from(repository.save(inscricao));
+    }
+
+    @PutMapping("/{id}")
+    public InscricaoMentoriaResponse atualizar(@PathVariable Long id,
+            @Valid @RequestBody InscricaoMentoriaRequest request) {
+        InscricaoMentoria inscricao = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Inscricao em mentoria nao encontrada"));
+
+        repository.findByParticipanteIdAndMentoriaId(request.participanteId(), request.mentoriaId())
+                .filter(existente -> !existente.getId().equals(id))
+                .ifPresent(existente -> {
+                    throw new IllegalArgumentException("Usuario ja inscrito nesta mentoria");
+                });
+
+        inscricao.setParticipante(buscarUsuario(request.participanteId()));
+        inscricao.setMentoria(buscarMentoria(request.mentoriaId()));
         return InscricaoMentoriaResponse.from(repository.save(inscricao));
     }
 
