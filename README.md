@@ -159,6 +159,130 @@ http://localhost:8080/swagger-ui/index.html#/
 
 ---
 
+## Autenticacao e Seguranca com JWT
+
+A API possui autenticacao com JWT. Quando a protecao esta ligada, algumas rotas exigem o envio do token no cabecalho da requisicao.
+
+### Tomada da protecao
+
+A protecao das rotas pode ser ativada ou desativada pela propriedade:
+
+```properties
+security.jwt.protection-enabled=true
+```
+
+Tambem e possivel controlar pelo arquivo `.env`:
+
+```env
+JWT_PROTECTION_ENABLED=true
+```
+
+- `true`: exige token nas rotas privadas.
+- `false`: libera todas as rotas, util para desenvolvimento ou demonstracao.
+
+### Cadastrar usuario
+
+Rota publica:
+
+```http
+POST /auth/register
+```
+
+Exemplo de corpo da requisicao:
+
+```json
+{
+  "nome": "Maria Silva",
+  "email": "maria@email.com",
+  "senha": "123456",
+  "telefone": "81999999999",
+  "tipoUsuario": "candidato"
+}
+```
+
+O campo `tipoUsuario` aceita `candidato` ou `empreendedor`.
+
+### Fazer login
+
+Rota publica:
+
+```http
+POST /auth/login
+```
+
+Exemplo de corpo da requisicao:
+
+```json
+{
+  "email": "maria@email.com",
+  "senha": "123456"
+}
+```
+
+Exemplo de resposta:
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIs...",
+  "tipo": "Bearer",
+  "usuario": {
+    "id": 1,
+    "nome": "Maria Silva",
+    "email": "maria@email.com",
+    "telefone": "81999999999",
+    "tipoUsuario": "candidato"
+  }
+}
+```
+
+### Usar o token JWT
+
+Nas rotas privadas, envie o token no cabecalho:
+
+```http
+Authorization: Bearer TOKEN_AQUI
+```
+
+### Rotas publicas
+
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /status`
+- `GET /vagas`
+- `GET /cursos`
+- `GET /servicos`
+- `GET /mentorias`
+- `GET /parcerias`
+- Rotas do Swagger: `/swagger-ui/**` e `/v3/api-docs/**`
+
+### Rotas privadas
+
+Exigem token quando `security.jwt.protection-enabled=true`:
+
+- `GET /auth/usuarios`
+- `GET /auth/usuarios/{id}`
+- `POST /auth/usuarios`
+- `PUT /auth/usuarios/{id}`
+- `DELETE /auth/usuarios/{id}`
+- `POST /vagas`
+- `PUT /vagas/{id}`
+- `DELETE /vagas/{id}`
+- `POST /cursos`
+- `PUT /cursos/{id}`
+- `DELETE /cursos/{id}`
+- `POST /servicos`
+- `PUT /servicos/{id}`
+- `DELETE /servicos/{id}`
+- `POST /mentorias`
+- `PUT /mentorias/{id}`
+- `DELETE /mentorias/{id}`
+- `POST /parcerias`
+- `PUT /parcerias/{id}`
+- `DELETE /parcerias/{id}`
+- Todas as rotas de inscricoes: `/inscricoes-vagas/**`, `/inscricoes-cursos/**` e `/inscricoes-mentorias/**`
+
+---
+
 ## 📄 Licença
 
 Este projeto é acadêmico e desenvolvido para fins educacionais.

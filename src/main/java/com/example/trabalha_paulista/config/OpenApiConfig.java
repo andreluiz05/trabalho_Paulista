@@ -33,8 +33,12 @@ public class OpenApiConfig {
                                 3. 🔑 No Swagger, clique em `Authorize`.
                                 4. 🪪 Cole somente o token, sem escrever `Bearer`.
 
-                                ✅ Nesta versao local, os endpoints ficam liberados para facilitar os testes no Swagger.
-                                O JWT continua disponivel em `/auth/register` e `/auth/login` para demonstrar autenticacao.
+                                ✅ Quando `security.jwt.protection-enabled=true`, as rotas privadas exigem JWT.
+                                Para testar no Swagger, gere um token em `/auth/register` ou `/auth/login`,
+                                clique em `Authorize` e cole somente o token, sem escrever `Bearer`.
+
+                                ⚙️ Para desenvolvimento ou demonstracao, a protecao pode ser desligada com
+                                `JWT_PROTECTION_ENABLED=false`.
 
                                 ## 🧭 Guia pratico para testar
                                 Este painel organiza os recursos em blocos, como `usuario-controller`,
