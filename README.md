@@ -38,7 +38,7 @@ Controller → Service → Repository → Database
 - Java  
 - Spring Boot  
 - JPA / Hibernate  
-- Banco de Dados (MySQL - RailWay)
+- Banco de Dados (MySQL na nuvem da Aiven)
 - Postman (testes de API)  
 - GitHub (versionamento)  
 
