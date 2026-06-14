@@ -37,6 +37,9 @@ public class OpenApiConfig {
                                 Para testar no Swagger, gere um token em `/auth/register` ou `/auth/login`,
                                 clique em `Authorize` e cole somente o token, sem escrever `Bearer`.
 
+                                🚪 **Como deslogar:**
+                                Para deslogar da sua conta aqui no Swagger, basta clicar no botão `Authorize` novamente e clicar em `Logout`. Isso vai remover a sua "pulseira VIP" da memória e você voltará a ser barrado nas rotas privadas.
+
                                 ⚙️ Para desenvolvimento ou demonstracao, a protecao pode ser desligada com
                                 `JWT_PROTECTION_ENABLED=false`.
 
