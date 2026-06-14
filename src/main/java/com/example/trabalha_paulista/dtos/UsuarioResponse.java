@@ -7,7 +7,8 @@ public record UsuarioResponse(
         String nome,
         String email,
         String telefone,
-        String tipoUsuario
+        String tipoUsuario,
+        String senha
 ) {
     public static UsuarioResponse from(Usuario usuario) {
         return new UsuarioResponse(
@@ -15,7 +16,8 @@ public record UsuarioResponse(
                 usuario.getNome(),
                 usuario.getEmail(),
                 usuario.getTelefone(),
-                usuario.getTipoUsuario()
+                usuario.getTipoUsuario(),
+                usuario.getSenha()
         );
     }
 }
