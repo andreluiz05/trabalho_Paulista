@@ -27,6 +27,12 @@ public class OpenApiConfig {
                                 🌐 Esta API serve como o back-end central do ecossistema. Ela pode alimentar
                                 plataformas web, aplicativos mobile e paineis administrativos atraves destes endpoints.
 
+                                ## 👥 Perfis de Usuario
+                                A plataforma foi desenhada para dois tipos principais de usuarios:
+                                * **`candidato`**: Cidadaos em busca de emprego. Podem buscar vagas, inscrever-se em cursos e solicitar mentorias.
+                                * **`empreendedor`**: Trabalhadores autonomos/MEIs. Usam o sistema para divulgar seus servicos e buscar qualificacao para seus negocios.
+                                *(⚠️ O campo `tipoUsuario` no cadastro aceita apenas essas duas palavras exatamente como escritas acima).*
+
                                 ## 🔐 Autenticacao
                                 1. 👤 Crie uma conta em `POST /auth/register` ou faca login em `POST /auth/login`.
                                 2. 📋 Copie o token retornado.
