@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explicação do Banco de Dados - Trabalha Paulista</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 40px auto;
+            max-width: 800px;
+            color: #333;
+        }
+        h1 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: #d9534f;
+            margin-top: 35px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        ul {
+            margin-bottom: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .highlight {
+            background-color: #f4f4f4;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+        .info-box {
+            background: #e9ecef;
+            border-left: 5px solid #0056b3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .print-btn {
+            display: block;
+            width: 250px;
+            margin: 20px auto;
+            padding: 15px;
+            background: #28a745;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+        }
+        .print-btn:hover {
+            background: #218838;
+        }
+        @media print {
+            .print-btn { display: none; }
+            body { margin: 0; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img src="src/main/resources/static/imagens/Logo_TP.png" alt="Banner Trabalha Paulista" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    </div>
+    <h1>Estrutura e Dados do Trabalha Paulista</h1>
+    
+    <div class="info-box">
+        <strong>Contexto Geral:</strong> Este banco de dados foi projetado para sustentar o ecossistema do <em>Trabalha Paulista</em>, conectando cidadãos a oportunidades de emprego, cursos de capacitação e permitindo que autônomos locais (MEIs) ofereçam seus serviços.
+    </div>
+
+    <h2>1. Usuários Principais (Tabela <span class="highlight">usuarios</span>)</h2>
+    <p>Foram criados 3 usuários para demonstrar os diferentes perfis da aplicação. <strong>Todos possuem a senha <span class="highlight">123456</span></strong> (salva de forma segura usando criptografia BCrypt).</p>
+    <ul>
+        <li><strong>Maria Silva (<span class="highlight">maria@email.com</span>)</strong> - <em>Perfil: candidato</em>. Representa a cidadã comum buscando emprego e qualificação técnica.</li>
+        <li><strong>João Souza (<span class="highlight">joao@email.com</span>)</strong> - <em>Perfil: empreendedor</em>. Representa o microempreendedor local que busca divulgar serviços e fazer mentorias para crescer seu negócio.</li>
+        <li><strong>Administrador (<span class="highlight">admin@trabalhapaulista.com</span>)</strong> - <em>Perfil: ADMIN</em>. Representa a prefeitura/gestor, responsável por cadastrar as vagas oficiais e firmar parcerias institucionais.</li>
+    </ul>
+
+    <h2>2. Oportunidades Oficiais do Município</h2>
+    <p>Dados inseridos pela administração pública:</p>
+    <ul>
+        <li><strong>Vagas (<span class="highlight">vagas</span>)</strong>: Foi cadastrada uma vaga de <em>Desenvolvedor Java Jr (CLT)</em> na TechCorp e uma vaga de <em>Estagiário de TI</em> na HelpDesk IT.</li>
+        <li><strong>Parcerias (<span class="highlight">parcerias</span>)</strong>: A prefeitura fechou uma parceria estratégica com a empresa <em>TechCorp</em> para contratação exclusiva de alunos do portal.</li>
+    </ul>
+
+    <h2>3. Capacitação e Evolução</h2>
+    <p>O foco na educação profissionalizante:</p>
+    <ul>
+        <li><strong>Cursos (<span class="highlight">cursos</span>)</strong>: Disponibilizados os cursos gratuitos de <em>Java para Iniciantes</em> (Senac) e <em>Spring Boot Masterclass</em> (FATEC).</li>
+        <li><strong>Mentorias (<span class="highlight">mentorias</span>)</strong>: Cadastradas sessões com especialistas para ajudar os jovens sobre <em>Carreira em TI</em> e <em>Como passar em Entrevistas</em>.</li>
+    </ul>
+
+    <h2>4. Serviços da Comunidade (<span class="highlight">servicos</span>)</h2>
+    <p>Os próprios usuários podem empreender na plataforma:</p>
+    <ul>
+        <li>A candidata <strong>Maria</strong>, que tem facilidade com escrita, cadastrou um serviço de <em>Revisão de Currículo</em> (Consultoria) por R$ 50,00 para ajudar outros jovens.</li>
+        <li>O empreendedor <strong>João</strong> cadastrou um serviço de <em>Criação de logotipo (Logo Express)</em> por R$ 150,00 (Design).</li>
+    </ul>
+
+    <h2>5. As Inscrições (Relacionamentos na Prática)</h2>
+    <p>Para comprovar que os relacionamentos de chaves estrangeiras (Tabelas Intermediárias) do banco funcionam, nós simulamos as seguintes interações reais:</p>
+    <ul>
+        <li>A <strong>Maria</strong> usou a plataforma e <em>se inscreveu no curso</em> de Java para Iniciantes. Com esse novo conhecimento, ela também <em>se candidatou</em> para a Vaga de Desenvolvedor Java Jr.</li>
+        <li>O <strong>João</strong> quer expandir sua empresa de design. Ele <em>se inscreveu no curso</em> Spring Boot e agendou uma <em>Mentoria</em> com o Carlos Eduardo para alavancar sua carreira.</li>
+    </ul>
+
+    <div style="text-align: center; margin-top: 50px; font-size: 0.9em; color: #777;">
+        Obrigado!!!<br>
+        <strong>💼Trabalha Paulista - Backend Spring Boot</strong>
+    </div>
+
+</body>
+</html>
