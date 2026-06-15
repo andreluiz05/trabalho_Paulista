@@ -131,15 +131,16 @@ O projeto é gerenciado utilizando **Kanban Scrum Ágil**, com organização de 
 
 ## 👥 Equipe
 
-Projeto desenvolvido por uma equipe de 6 integrantes:
+Projeto desenvolvido por uma equipe de 7 integrantes:
 
-- Líder: Fernando  
-- Desenvolvedores:
-- André Luiz
--  Camila Vitória
--  Ênio Enrique
--  Aquiles Magalhães
--  Rian
+- Líder: Fernando (Modelo Conceitual do banco de Dados - DER)
+- Integrantes:
+- André Luiz(Desenvolvimento)
+-  Camila Vitória (Vídeo Pitch)
+-  Ênio Enrique(Desenvolvimenti)
+-  Aquiles Magalhães(Vídeo Pitch)
+-  Rian Honorato (Apresentação do projeto - Slides)
+- Emerson Marcos (Apresentação do projeto - Slides)
 
 ---
 
