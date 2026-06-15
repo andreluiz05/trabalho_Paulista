@@ -1,5 +1,6 @@
 # 📌 Trabalha Paulista - Backend
 
+<img src="banner%20trabalha%20paulista.png" alt="Banner Trabalha Paulista" width="700">
 ## 📖 Descrição
 
 O **Trabalha Paulista** é uma API backend desenvolvida em Java com o objetivo de promover a inclusão produtiva e fortalecer o empreendedorismo local no município de Paulista.
