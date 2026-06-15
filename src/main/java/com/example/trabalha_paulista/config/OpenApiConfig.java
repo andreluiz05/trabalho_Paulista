@@ -50,7 +50,7 @@ public class OpenApiConfig {
                                 `JWT_PROTECTION_ENABLED=false`.
 
                                 ## 🧭 Guia pratico para testar
-                                Este painel organiza os recursos em blocos, como `usuario-controller`,
+                                Este painel organiza os recursos em blocos, como `auth-controller`,
                                 `vaga-controller`, `curso-controller`, `mentoria-controller` e `parceria-controller`.
 
                                 1. 📂 Abra o bloco do recurso desejado.
